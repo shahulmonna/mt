@@ -32,7 +32,6 @@ public class MtProducerImpl implements MtProducer {
 				CollectionUtil.isNotEmpty(mtRequest.getReferenceNo()) ?
 						mtRequest.getReferenceNo() : longGenerator.generate().toString());
 
-
 		// push mt
 		MessageProperties messageProperties = new MessageProperties();
 		messageProperties.setType("MtRequest");

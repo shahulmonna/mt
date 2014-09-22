@@ -11,6 +11,8 @@ import org.springframework.amqp.rabbit.core.ChannelAwareMessageListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Date;
+
 /**
  * @author: Syed Shahul
  */
@@ -23,13 +25,21 @@ public class MtWorkerImpl implements ChannelAwareMessageListener {
 
 	@Override
 	public void onMessage(Message message, Channel channel) throws Exception {
+		try {
 		/*if(LOGGER.isInfoEnabled()){
 		   LOGGER.info("onMessage : {}", new String(message.getBody()));
 		}*/
-
-		switch (message.getMessageProperties().getType()) {
-			case "MtRequest":
-				mtManager.processMT((MtRequest) AmqpUtil.convertMessage(message));
+if(message.getMessageProperties().getType() != null) {
+	switch (message.getMessageProperties().getType()) {
+		case "MtRequest":
+			mtManager.processMT((MtRequest) AmqpUtil.convertMessage(message));
+	}
+}else {
+	LOGGER.info("msg :{}", new String(message.getBody()));
+}
+		}catch (Exception e){
+			e.fillInStackTrace();
+			LOGGER.error("{}",e.getMessage());
 		}
 	//	channel.basicAck(message.getMessageProperties().getDeliveryTag(), true);
 	}

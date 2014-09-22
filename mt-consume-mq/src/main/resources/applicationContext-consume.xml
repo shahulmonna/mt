@@ -27,28 +27,28 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
 			id="amqpConnectionFactory"
 			host="#{ systemEnvironment['MT_RABBIT_MQ_HOST']?:'localhost'}"
 			port="#{ systemEnvironment['MT_RABBIT_MQ_PORT']?:'5672'}"
-			username="#{ systemEnvironment['MT_RABBIT_MQ_UNAME']?:'guestq'}"
-			password="#{ systemEnvironment['MT_RABBIT_MQ_PASSCODE']?:'guestq'}"
+			username="#{ systemEnvironment['MT_RABBIT_MQ_UNAME']?:'admin'}"
+			password="#{ systemEnvironment['MT_RABBIT_MQ_PASSCODE']?:'welcome123'}"
 			virtual-host="#{ systemEnvironment['MT_RABBIT_MQ_VHOST']?:'/'}"
 			channel-cache-size="#{ systemEnvironment['MT_RABBIT_MQ_CACHE_SIZE']?:'25'}"/>
 
 
-	<rabbit:topic-exchange name="mt.topic.exchange.sms">
+	<rabbit:topic-exchange name="mt.topic.exchange">
 		<rabbit:bindings>
-			<rabbit:binding queue="sms.q.1" pattern="mt.route.*"/>
+			<rabbit:binding queue="notification.q" pattern="mt.route.*"/>
 		</rabbit:bindings>
 	</rabbit:topic-exchange>
 
 	<!--<rabbit:template id="consumeAmqpTemplate"
 	                 connection-factory="amqpConnectionFactory"
-	                 exchange="mt.topic.exchange.sms"
+	                 exchange="mt.topic.exchange"
 	                 routing-key="mt.route.sms"/>
 -->
 	<rabbit:admin connection-factory="amqpConnectionFactory"/>
 
 	<rabbit:listener-container connection-factory="amqpConnectionFactory">
 		<!-- adding more than one queue names will cause duplicate.-->
-		<rabbit:listener ref="mtWorkerImpl" queue-names="sms.q.1"/>
+		<rabbit:listener ref="mtWorkerImpl" queue-names="notification.q"/>
 	</rabbit:listener-container>
 
 </beans>

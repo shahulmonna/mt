@@ -23,27 +23,28 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
 			id="amqpConnectionFactory"
 			host="#{ systemEnvironment['MT_RABBIT_MQ_HOST']?:'localhost'}"
 			port="#{ systemEnvironment['MT_RABBIT_MQ_PORT']?:'5672'}"
-			username="#{ systemEnvironment['MT_RABBIT_MQ_UNAME']?:'guestq'}"
-			password="#{ systemEnvironment['MT_RABBIT_MQ_PASSCODE']?:'guestq'}"
+			username="#{ systemEnvironment['MT_RABBIT_MQ_UNAME']?:'admin'}"
+			password="#{ systemEnvironment['MT_RABBIT_MQ_PASSCODE']?:'welcome123'}"
 			virtual-host="#{ systemEnvironment['MT_RABBIT_MQ_VHOST']?:'/'}"
 			channel-cache-size="#{ systemEnvironment['MT_RABBIT_MQ_CACHE_SIZE']?:'25'}"/>
 
+    <rabbit:admin connection-factory="amqpConnectionFactory"/>
+
+    <rabbit:topic-exchange name="mt.topic.exchange" auto-declare="true">
+        <rabbit:bindings>
+            <rabbit:binding queue="notification.q" pattern="mt.route.*"/>
+        </rabbit:bindings>
+    </rabbit:topic-exchange>
+
+    <rabbit:template id="amqpTemplate"
+                     connection-factory="amqpConnectionFactory"
+                     exchange="mt.topic.exchange"
+                     routing-key="mt.route.sms"/>
+
+
 	<!--<rabbit:queue name="myQueue" />-->
-	<rabbit:queue name="sms.q.1"/>
-	<rabbit:queue name="sms.q.2"/>
-
-	<rabbit:topic-exchange name="mt.topic.exchange.sms">
-		<rabbit:bindings>
-			<rabbit:binding queue="sms.q.1" pattern="mt.route.*"/>
-		</rabbit:bindings>
-	</rabbit:topic-exchange>
-
-	<rabbit:template id="amqpTemplate"
-	                 connection-factory="amqpConnectionFactory"
-	                 exchange="mt.topic.exchange.sms"
-	                 routing-key="mt.route.sms"/>
-
-	<rabbit:admin connection-factory="amqpConnectionFactory"/>
+	<rabbit:queue name="notification.q" auto-declare="true"/>
+	<!--<rabbit:queue name="sms.q.2"/>-->
 
 	<!-- auto proxy -->
 	<bean
