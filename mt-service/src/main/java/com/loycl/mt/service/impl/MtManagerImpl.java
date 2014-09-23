@@ -8,6 +8,7 @@ import com.loycl.mt.utils.status.exception.MTException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
 /**
@@ -19,6 +20,7 @@ public class MtManagerImpl implements MtManager {
 			LoggerFactory.getLogger(MtManagerImpl.class);
 
 	private MtProducer mtProducer;
+	private MongoTemplate   mongoTemplate;
 
 	@Override
 	public MtResponse pushMT(MtRequest mtRequest) throws MTException {
@@ -30,9 +32,8 @@ public class MtManagerImpl implements MtManager {
 
 	@Override
 	public void processMT(MtRequest mtRequest) throws MTException {
-		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("MtManagerImpl->processMT : {}", mtRequest.toString());
-		}
+		//push object to mongo db
+		mongoTemplate.save(mtRequest);
 	}
 
 	@Autowired
@@ -40,4 +41,8 @@ public class MtManagerImpl implements MtManager {
 		this.mtProducer = mtProducer;
 	}
 
+	@Autowired
+	public void setMongoTemplate(MongoTemplate mongoTemplate) {
+		this.mongoTemplate = mongoTemplate;
+	}
 }

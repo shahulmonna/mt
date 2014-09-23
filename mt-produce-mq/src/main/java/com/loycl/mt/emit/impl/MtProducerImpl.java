@@ -40,9 +40,9 @@ public class MtProducerImpl implements MtProducer {
 		String mtRequestStr = MapperUtil.convertToString(mtRequest);
 		Message message = new Message(mtRequestStr.getBytes(), messageProperties);
 
-		if (LOGGER.isInfoEnabled()) {
+		/*if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("mtProducer : {}", mtResponse);
-		}
+		}*/
 		amqpTemplate.convertAndSend(message);
 		return mtResponse;
 	}

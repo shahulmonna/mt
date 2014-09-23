@@ -3,6 +3,8 @@ package com.loycl.mt.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -16,9 +18,12 @@ import java.io.Serializable;
 @XmlAccessorType(XmlAccessType.FIELD)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategy.LowerCaseWithUnderscoresStrategy.class)
+@Document(collection = "mtRequest")
 public class MtRequest implements Serializable {
 
 	private static final long serialVersionUID = -3081516183308198744L;
+	@Id
+	private String id;
 	/**
 	 * mobile_no
 	 * msg
@@ -38,6 +43,14 @@ public class MtRequest implements Serializable {
 		this.mobileNo = mobileNo;
 		this.msg = msg;
 		this.referenceNo = referenceNo;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getMobileNo() {

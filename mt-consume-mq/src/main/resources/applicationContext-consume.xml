@@ -4,6 +4,7 @@
        xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:rabbit="http://www.springframework.org/schema/rabbit"
        xmlns="http://www.springframework.org/schema/beans"
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
        xsi:schemaLocation="http://www.springframework.org/schema/rabbit
            http://www.springframework.org/schema/rabbit/spring-rabbit.xsd
 http://www.springframework.org/schema/beans
@@ -11,7 +12,7 @@ http://www.springframework.org/schema/beans/spring-beans.xsd
 http://www.springframework.org/schema/context
 http://www.springframework.org/schema/context/spring-context.xsd
 http://www.springframework.org/schema/tx
-http://www.springframework.org/schema/tx/spring-tx.xsd">
+http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo.xsd">
 
 	<context:component-scan base-package="com.loycl.mt.work"/>
 	<tx:annotation-driven/>
@@ -32,12 +33,12 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
 			virtual-host="#{ systemEnvironment['MT_RABBIT_MQ_VHOST']?:'/'}"
 			channel-cache-size="#{ systemEnvironment['MT_RABBIT_MQ_CACHE_SIZE']?:'25'}"/>
 
-
+<!--
 	<rabbit:topic-exchange name="mt.topic.exchange">
 		<rabbit:bindings>
 			<rabbit:binding queue="notification.q" pattern="mt.route.*"/>
 		</rabbit:bindings>
-	</rabbit:topic-exchange>
+	</rabbit:topic-exchange>-->
 
 	<!--<rabbit:template id="consumeAmqpTemplate"
 	                 connection-factory="amqpConnectionFactory"
@@ -48,7 +49,8 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
 
 	<rabbit:listener-container connection-factory="amqpConnectionFactory">
 		<!-- adding more than one queue names will cause duplicate.-->
-		<rabbit:listener ref="mtWorkerImpl" queue-names="notification.q"/>
+		<rabbit:listener ref="mtWorkerImpl"
+                         queue-names="notification.q, notification.q1, notification.q2, notification.q3"/>
 	</rabbit:listener-container>
 
 </beans>

@@ -32,7 +32,9 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <rabbit:topic-exchange name="mt.topic.exchange" auto-declare="true">
         <rabbit:bindings>
-            <rabbit:binding queue="notification.q" pattern="mt.route.*"/>
+            <rabbit:binding queue="notification.q1" pattern="mt.route.*"/>
+            <rabbit:binding queue="notification.q2" pattern="mt.route.*"/>
+            <rabbit:binding queue="notification.q3" pattern="mt.route.*"/>
         </rabbit:bindings>
     </rabbit:topic-exchange>
 
@@ -43,7 +45,9 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
 
 
 	<!--<rabbit:queue name="myQueue" />-->
-	<rabbit:queue name="notification.q" auto-declare="true"/>
+	<rabbit:queue name="notification.q1" auto-declare="true"/>
+    <rabbit:queue name="notification.q2" auto-declare="true"/>
+    <rabbit:queue name="notification.q3" auto-declare="true"/>
 	<!--<rabbit:queue name="sms.q.2"/>-->
 
 	<!-- auto proxy -->

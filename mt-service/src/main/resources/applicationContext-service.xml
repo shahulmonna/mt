@@ -3,13 +3,13 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns="http://www.springframework.org/schema/beans"
-       xsi:schemaLocation="
-http://www.springframework.org/schema/beans
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans.xsd
 http://www.springframework.org/schema/context
 http://www.springframework.org/schema/context/spring-context.xsd
 http://www.springframework.org/schema/tx
-http://www.springframework.org/schema/tx/spring-tx.xsd">
+http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo.xsd">
 
 	<context:component-scan base-package="com.loycl.mt.service"/>
 	<tx:annotation-driven/>
@@ -20,5 +20,16 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
 	<!-- auto proxy -->
 	<bean
 			class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"/>
+
+
+    <!-- mongo db-->
+
+    <mongo:mongo host="#{ systemEnvironment['MT_MONGO_DB_HOST']?:'127.0.0.1'}" port="#{ systemEnvironment['MT_MONGO_DB_PORT']?:'27017'}" />
+    <mongo:db-factory dbname="#{ systemEnvironment['MT_MONGO_DB']?:'mt'}"
+                      id="mongoDbFactory"/>
+
+    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />
+    </bean>
 </beans>
 

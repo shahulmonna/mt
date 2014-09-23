@@ -36,7 +36,7 @@ public class SampleEmitterImpl implements SampleEmitter {
 
 		int i;
 			LOGGER.info("Push Start at : {}", new Date().toString());
-		for (i = 0; i < 50000; i++) {
+		for (i = 0; i < 100000; i++) {
 			// push mt
 			MessageProperties messageProperties = new MessageProperties();
 			messageProperties.setType("MtRequest");
@@ -45,8 +45,8 @@ public class SampleEmitterImpl implements SampleEmitter {
 			String mtRequestStr = MapperUtil.convertToString(new MtRequest
 					(messageProperties.getMessageId().substring(2),
 							"Grattis!... use coupon code : #CODE# ".replace
-							("#CODE#",messageProperties.getMessageId().substring(8,
-									4)).concat(" ref:"+i),
+							("#CODE#",messageProperties.getMessageId().substring(4)).concat
+									(" ref:"+i),
 							messageProperties.getMessageId()));
 			Message message = new Message(mtRequestStr.getBytes(), messageProperties);
 
